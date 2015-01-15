@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "TimeStat.h"
 #include "BTree.h"
 #include "AVLTree.h"
 #include "HashTable.h"
@@ -13,10 +14,13 @@ using namespace std;
 #define BINARY_TREE 0
 #define AVL_TREE 1
 #define HASH_TABLE 2
+#define TRANSMITTER_CNT 10000
 
 binary_tree* mytree=NULL;
 AVL_tree* myavltree=NULL;
 Hash_node** hashtable=(Hash_node**)alloc(HASH_SIZE*sizeof(Hash_node*));
+t_s time_stat_find[3];
+t_s time_stat_alter[3];
 
 IP_PORT Get_IP_PORT(char* mess) {
 	IP_PORT tmpipp;
@@ -127,20 +131,30 @@ void main()
 
 	int client_addr_size=sizeof(client_addr);
 	clientsock=accept(serversock,(sockaddr*)&client_addr,&client_addr_size);
-
 	char buf[13];
+	for(int i=0;i<TRANSMITTER_CNT;i++)
+	{
+		if(recv(clientsock,&buf[0],13,0))
+			for(int j=0;j<3;j++) AddToStructure(buf,j);
+	}
 	while (recv(clientsock,&buf[0],13,0))
 	{
 		switch (buf[0])
 		{
 		case ADD: { 
-			for(int i=0;i<3;i++)
-			AddToStructure(buf,i); 
+			for(int i=0;i<3;i++) {
+				addtime(&time_stat_find[i],get_time());
+				AddToStructure(buf,i); 
+				addtime(&time_stat_find[i],get_time());
+			}
 			break; 
 				  }
 		case CHANGE: {
-			for(int i=0;i<3;i++)
-			ChangeInStructure(buf,i);
+			for(int i=0;i<3;i++) {
+				addtime(&time_stat_alter[i],get_time());
+				ChangeInStructure(buf,i);
+				addtime(&time_stat_alter[i],get_time());
+			}
 			break;
 					 }
 		default: {
@@ -149,9 +163,11 @@ void main()
 				 }
 		}
 	}
-	cout<<(int)myavltree->height;
-	print_bt((binary_tree*)myavltree);
-	cout<<'\n';
-	print_bt((binary_tree*)mytree);
+	cout<<"Find\n";
+	for(int i=0;i<3;i++)
+		printtime(&time_stat_find[i]);
+	cout<<"Alter\n";
+	for(int i=0;i<3;i++)
+		printtime(&time_stat_alter[i]);
 	WSACleanup();//освобождение ресурсов
 }

@@ -7,8 +7,8 @@
 
 #define Server_PORT 1234
 #define SERVERADDR "127.0.0.1"
-#define TRANSMITTER_COUNT 30
-#define DATAGRAMM_COUNT 3000
+#define TRANSMITTER_COUNT 10000
+#define DATAGRAMM_COUNT 10000
 #define IS_UNIQUE 1
 
 struct IP_PORT
@@ -91,7 +91,7 @@ int main(int argc, char* argv[])
 
 
 	// Инициализируем библиотеку WinSock
-	if (WSAStartup(0x202, &wsa))
+	if (WSAStartup(MAKEWORD(2,2), &wsa))
 	{
 		printf("WSAStart error %d\n", WSAGetLastError());
 		return -1;

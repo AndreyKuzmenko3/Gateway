@@ -1,5 +1,5 @@
 #include "IP_PORT.h"
-#define HASH_SIZE 50
+#define HASH_SIZE 1000
 
 struct Hash_node {
 	Hash_node* next;
