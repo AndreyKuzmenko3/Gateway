@@ -40,7 +40,7 @@ void addtime(t_s* tm_s,long long cur_time) {
 }
 
 void printtime(t_s* time_stat) {
-	printf("Avarage time : %.2f mcs\n",time_stat->avg_time/time_stat->time_count);
+	printf("Average time : %.2f mcs\n",time_stat->avg_time/time_stat->time_count);
 	printf("Max time     : %.2f mcs\n",time_stat->max_time);
 	printf("Min time     : %.2f mcs\n\n",time_stat->min_time);
 }

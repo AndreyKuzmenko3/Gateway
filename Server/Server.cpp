@@ -11,10 +11,10 @@ using namespace std;
 #pragma comment (lib, "Ws2_32.lib")
 #define ADD 1
 #define CHANGE 2
+#define INIT 3
 #define BINARY_TREE 0
 #define AVL_TREE 1
 #define HASH_TABLE 2
-#define TRANSMITTER_CNT 10000
 
 binary_tree* mytree=NULL;
 AVL_tree* myavltree=NULL;
@@ -106,7 +106,7 @@ void ChangeInStructure(char* buf, int type_of_struct) {
 void main()
 {
 	WSADATA wdata;
-	if(WSAStartup(MAKEWORD(2,2),&wdata))//инициализация библиотеки сокетов
+	if(WSAStartup(MAKEWORD(2,2),&wdata))
 		printf("%s","Init error");
 
 	sockaddr_in local_addr;
@@ -132,11 +132,6 @@ void main()
 	int client_addr_size=sizeof(client_addr);
 	clientsock=accept(serversock,(sockaddr*)&client_addr,&client_addr_size);
 	char buf[13];
-	for(int i=0;i<TRANSMITTER_CNT;i++)
-	{
-		if(recv(clientsock,&buf[0],13,0))
-			for(int j=0;j<3;j++) AddToStructure(buf,j);
-	}
 	while (recv(clientsock,&buf[0],13,0))
 	{
 		switch (buf[0])
@@ -157,13 +152,17 @@ void main()
 			}
 			break;
 					 }
+		case INIT: {
+			for(int j=0;j<3;j++) AddToStructure(buf,j);
+			break;
+				   }
 		default: {
 			cout<<"Error";
 			return;
 				 }
 		}
 	}
-	cout<<"Find\n";
+	cout<<"Search\n";
 	for(int i=0;i<3;i++)
 		printtime(&time_stat_find[i]);
 	cout<<"Alter\n";

@@ -8,7 +8,7 @@
 #define Server_PORT 1234
 #define SERVERADDR "127.0.0.1"
 #define TRANSMITTER_COUNT 10000
-#define DATAGRAMM_COUNT 10000
+#define DATAGRAMM_COUNT 1000000
 #define IS_UNIQUE 1
 
 struct IP_PORT
@@ -51,7 +51,7 @@ char* CreateMessage(IP_PORT *ipps, IP_PORT *ipp, int type, char *buf)
 		buf[4-i] = (char)((ipp->IP & (mask<<(i*8)))>>(i*8));
 	for (int i=1;i>=0;i--)
 		buf[6-i] = (char)((ipp->PORT & (mask<<(i*8)))>>(i*8));
-	if (1 == type)
+	if (1 == type || 3 == type)
 	{
 		for (int i=7;i<13;i++)
 			buf[i]=0;
@@ -123,7 +123,7 @@ int main(int argc, char* argv[])
 	GenerateTransmitter(mass_of_trans);
 	unsigned char message[13];
 	for(int i=0;i<TRANSMITTER_COUNT;i++) {
-		CreateMessage(mass_of_trans, &mass_of_trans[i], 1, (char*)message);
+		CreateMessage(mass_of_trans, &mass_of_trans[i], 3, (char*)message);
 
 		if (send(my_sock, (char*)message, 13, 0) < 0)
 		{
@@ -141,8 +141,6 @@ int main(int argc, char* argv[])
 			printf("Send failed");
 			break;
 		}
-		//printf("%s\n",message);
-		printf("%u/%u\n",((message[1]<<24)|(message[2]<<16)|(message[3]<<8)|(message[4])),((message[5]<<8)|(message[6])));
 		count++;
 	}
 	closesocket(my_sock);

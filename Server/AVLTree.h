@@ -9,25 +9,14 @@ struct AVL_tree
 };
 #pragma pack()
 AVL_tree* createavlt(IP_PORT);
-
 AVL_tree* insert(AVL_tree*, IP_PORT);
-
 AVL_tree* find(AVL_tree*, IP_PORT);
-
 IP_PORT rightmost(AVL_tree*);
-
 AVL_tree* remove(AVL_tree*, IP_PORT);
-
 char height(AVL_tree*);
-
 char bfactor(AVL_tree*);
-
 void fixHeight(AVL_tree*);
-
 AVL_tree* rotateRight(AVL_tree*);
-
 AVL_tree* rotateLeft(AVL_tree*);
-
 AVL_tree* balance(AVL_tree*);
-
 void deleteavlt(AVL_tree*);

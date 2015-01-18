@@ -1,7 +1,7 @@
 #pragma once
 struct t_s
 {
-	double avg_time;//среднее время выделения памяти
+	double avg_time;//среднее время
 	double min_time;//минимальное
 	double max_time;//максимальное
 	long long prev_time;
